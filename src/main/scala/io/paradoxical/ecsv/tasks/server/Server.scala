@@ -4,7 +4,7 @@ import com.google.inject.Module
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
-import io.paradoxical.ecsv.tasks.server.controllers.EcsController
+import io.paradoxical.ecsv.tasks.server.controllers.{EcsController, UiController}
 import io.paradoxical.finatra.HttpServiceBase
 import io.paradoxical.finatra.swagger.ApiDocumentationConfig
 
@@ -23,6 +23,7 @@ class Server(override val modules: List[Module]) extends HttpServiceBase {
       .filter[TraceIdMDCFilter[Request, Response]]
       .filter[CommonFilters]
       .add[EcsController]
+      .add[UiController]
 
     configureDocumentation(router)
   }
