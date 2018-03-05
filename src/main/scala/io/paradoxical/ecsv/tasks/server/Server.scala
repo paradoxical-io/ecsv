@@ -23,8 +23,9 @@ class Server(override val modules: List[Module]) extends HttpServiceBase {
       .filter[TraceIdMDCFilter[Request, Response]]
       .filter[CommonFilters]
       .add[EcsController]
-      .add[UiController]
 
     configureDocumentation(router)
+
+    router.add[UiController]
   }
 }

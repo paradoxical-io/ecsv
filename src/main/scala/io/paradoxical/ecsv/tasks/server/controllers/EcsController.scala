@@ -9,7 +9,7 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class EcsController @Inject()(ecsProvider: EcsProvider)(implicit executionContext: ExecutionContext) extends Framework.RestApi {
-  getWithDoc("/api/v1/ecs/clusters/:clusterName/services/") {
+  getWithDoc("/api/v1/ecs/clusters/:clusterName/services") {
     _.tag("ECS").
       description("Gets ecs services").
       request[ListServicesRequest].
