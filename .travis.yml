@@ -3,10 +3,11 @@ scala:
 - 2.12.4
 jdk:
 - oraclejdk8
-before_install:
+before_script:
   - nvm use 6
+  - npm install -g yarn
 script:
-  - webapp-build.sh
+  - ./webapp-build.sh
   - travis_retry sbt ++$TRAVIS_SCALA_VERSION clean test
 cache:
   yarn: true
