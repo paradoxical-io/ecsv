@@ -21,7 +21,15 @@ class EcsController @Inject()(ecs: EcsProvider)(implicit executionContext: Execu
     } yield {
       val filtered = request.search.map(search => services.filter(_.getServiceName.contains(search))).getOrElse(services)
 
-      filtered.map(s => ServiceDto(name = s.getServiceName, arn = s.getServiceArn, status = s.getStatus))
+      filtered.
+        map(s => ServiceDto(
+          name = s.getServiceName,
+          arn = s.getServiceArn,
+          status = s.getStatus,
+          desired = s.getDesiredCount,
+          pending = s.getPendingCount
+        )).
+        sortBy(_.name)
     }
   }
 
@@ -73,5 +81,7 @@ case class ListServicesRequest(
 case class ServiceDto(
   name: String,
   arn: String,
-  status: String
+  status: String,
+  desired: Int,
+  pending: Int
 )

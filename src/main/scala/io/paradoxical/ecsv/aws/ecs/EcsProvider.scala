@@ -80,9 +80,9 @@ class EcsProvider @Inject()(
     cache.slimServices.get(cluster, () => {
       for {
         arns <- listServiceArns(cluster)
-        services <- Future.sequence(arns.grouped(10).map(getServiceSimple))
+        services <- Future.sequence(arns.toList.grouped(10).map(getServiceSimple(_, cluster)))
       } yield {
-        services.flatten.toSeq
+        services.toList.flatten
       }
     })
   }
@@ -142,11 +142,11 @@ class EcsProvider @Inject()(
     ).map(_.flatMap(_.getServiceArns.asScala))
   }
 
-  def getServiceSimple(services: Seq[String])(implicit executionContext: ExecutionContext): Future[Seq[Service]] = {
+  def getServiceSimple(services: Seq[String], cluster: String)(implicit executionContext: ExecutionContext): Future[Seq[Service]] = {
     for {
-      services <- ecs.describeServicesAsync(new DescribeServicesRequest().withServices(services.asJava)).toScalaFuture
+      services <- ecs.describeServicesAsync(new DescribeServicesRequest().withServices(services.asJava).withCluster(cluster)).toScalaFuture
     } yield {
-      services.getServices.asScala
+      services.getServices.asScala.toList
     }
   }
 

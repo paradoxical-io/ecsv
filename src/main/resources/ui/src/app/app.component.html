@@ -1,5 +1,42 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">ECS Viewer</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <mat-form-field class="navbar-nav mr-auto">
+            <mat-select placeholder="Select Cluster" (change)="selectCluster($event)">
+                <mat-option *ngFor="let cluster of clusters" [value]="cluster.name">
+                    {{ cluster.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-check-input" type="checkbox" value="" id="showOnlyNonZero" (click)="toggleNonZero()">
+            <label class="form-check-label" for="showOnlyNonZero">
+                Non Zero
+            </label>
+            <input class="form-control mr-sm-2"
+                   type="search"
+                   placeholder="Filter"
+                   [(ngModel)]="searchText"
+                   aria-label="Search"
+                   name="search"
+                   (keyup)="filterServices(searchText)">
+        </form>
+    </div>
+</nav>
+
 <div class="container">
-  <ul *ngFor="let service of services">
-    <li>{{service.name}}</li>
-  </ul>
+    <div layout="row">
+        <div class="col">
+            <div *ngFor="let service of services">
+                <mat-card>
+                    <mat-card-title>{{service.name}}</mat-card-title>
+                    <mat-card-content>
+                        {{service.status}}
+                        Desired: <span class="badge badge-primary">{{service.desired}}</span>
+                        Pending: <span class="badge badge-warning">{{service.pending}}</span>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
